@@ -88,7 +88,7 @@ describe('MapGenerator', () => {
   
       const map = mapGen.generateMap();
   
-      console.log('Visualized Map:');
+      console.dlog('Visualized Map:');
       mapGen.visualizeMap(map); // This outputs the visualized map to the console
     });
 

@@ -6,19 +6,16 @@ export default class MapGenerator {
     this.height = height;
     this.min = options.min !== undefined ? options.min : 0.0;
     this.max = options.max !== undefined ? options.max : 1.0;
-    this.scale = options.scale || 0.1;
+    this.scale = options.scale || 1;
     this.noise = new Simplex(options.seed);
   }
 
   generateMap() {
     const map = [];
-    for (let y = 0; y < this.height; y++) {
+    for (let y = 0; y < this.height; y+=0.1) {
       const row = [];
-      for (let x = 0; x < this.width; x++) {
-        let value = this.noise.noise2D(x * this.scale, y * this.scale);
-        // Normalize the noise value to [0, 1]
-        value = (value + 1) / 2;
-
+      for (let x = 0; x < this.width; x+=0.1) {
+        let value = this.noise.noise2D(x, y) * this.scale;
         // Apply min and max cutoffs
         if (value < this.min) value = 0;
         if (value > this.max) value = 1;
@@ -35,9 +32,7 @@ export default class MapGenerator {
     for (let y = yStart; y < yEnd; y++) {
       const row = [];
       for (let x = xStart; x < xEnd; x++) {
-        const value = this.noiseType === 'perlin'
-          ? this.noise.noise2D(x * this.scale, y * this.scale)
-          : this.noise.noise2D(x * this.scale, y * this.scale);
+        let value = this.noise.noise2D(x , y) * this.scale;
         row.push(value);
       }
       extendedMap.push(row);
@@ -72,7 +67,7 @@ export default class MapGenerator {
           rowStr += chars[3];
         }
       });
-      console.log(rowStr);
+      console.dlog(rowStr);
     });
   }
 }
